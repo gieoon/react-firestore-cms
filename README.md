@@ -15,12 +15,15 @@ npm install --save react-firestore-cms
 ```jsx
 import React, { Component } from 'react'
 
-import MyComponent from 'react-firestore-cms'
-import 'react-firestore-cms/dist/index.css'
+import CMS from 'react-firestore-cms'
+import 'react-firestore-cms/dist/cms.css';
+import 'react-firestore-cms/dist/loading.css';
+import 'react-firestore-cms/dist/index.css';
+import 'react-firestore-cms/dist/app.css';
 
 class Example extends Component {
   render() {
-    return <MyComponent />
+    return <CMS />
   }
 }
 ```
