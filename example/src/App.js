@@ -93,7 +93,7 @@ const MyWebsite = () => {
 }
 
 const App = () => {
-  return <CMS projectName="bush_and_beyond"/*"test_project"*/ children={<MyWebsite />} />
+  return <CMS projectName="test" children={<MyWebsite />} />
 }
 
 export default App

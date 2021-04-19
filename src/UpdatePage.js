@@ -21,7 +21,7 @@ export default function UpdatePage({
         if(frameLoaded){
             highlightEditable();
 
-            setInterval(() => {
+            var interval = setInterval(() => {
                 addEditButton();
             }, 1500);
 
@@ -31,12 +31,19 @@ export default function UpdatePage({
             link.rel = "stylesheet";
             link.href = "https://cdn.quilljs.com/1.3.6/quill.snow.css";
             head.appendChild(link);
-            return () => { head.removeChild(link); }
+            return () => { 
+                head.removeChild(link); 
+                console.log('CLEARING INTERVAL');
+                clearInterval(interval);
+            }
         }
     }, [frameLoaded]);
 
     const getIframe = () => {
-        return document.querySelector('#editingFrame').contentDocument;
+        var parent = document.querySelector('#editingFrame');
+        if(parent)
+            return parent.contentDocument;
+        return undefined;
     }
 
     const addEditButton = () => {

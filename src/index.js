@@ -751,7 +751,6 @@ export default function CMS({
                 <title>Update your website</title>
                 <link rel="icon" type="image/png" href="blank.ico" sizes="16x16" />
             </Helmet>
-            <UpdatePage projectName={projectName} db={db} frameLoaded={frameLoaded} />
             {
                 !currentUid && loginComplete &&
                 <div className="overlay">
@@ -818,7 +817,10 @@ export default function CMS({
                 </div>
                 <div className="right">
                     { editType === 0
-                        ? <WebpageEditor /*pageData={pageData}*/ setFrameLoaded={setFrameLoaded} children={children} />
+                        ? <WebpageEditor /*pageData={pageData}*/ setFrameLoaded={setFrameLoaded} /*children={children}*/>
+                            {children}
+                            <UpdatePage projectName={projectName} db={db} frameLoaded={frameLoaded} />
+                        </WebpageEditor>
                         : <React.Fragment>
                             <div className="top">
                                 <div className="header">
