@@ -1,8 +1,6 @@
 // Client-facing CMS
 // Client navigates to their webpage, then to /edit, then they can update the content as they wish.
 
-// Google Tag Manager layout.
-
 import React, {useState, useEffect, useCallback} from 'react';
 import {Helmet} from "react-helmet";
 // import firebase from 'firebase/app';
@@ -32,7 +30,7 @@ import WebpageEditor from './webpageEditor.js';
 // import { Document, Page } from 'react-pdf';
 // import { pdfjs } from 'react-pdf';
 // pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
-
+import UpdatePage from './UpdatePage.js';
 
 import firebaseConfig from './config';
 /* 
@@ -46,6 +44,7 @@ const db = firebase.firestore();
 
 export default function CMS({
     projectName,
+    children,
 }){
     const [loginComplete, setLoginComplete] = useState(false);
     const [currentUid, setCurrentUid] = useState();
@@ -57,11 +56,11 @@ export default function CMS({
     const [showingNew, setShowingNew] = useState(false);
     const [newText, setNewText] = useState("");
     const [newTitle, setNewTitle] = useState("");
-    const [newDate, setNewDate] = useState(new Date());//useState(undefined);
+    const [newDate, setNewDate] = useState(new Date()); //useState(undefined);
     const [showSaving, setShowSaving] = useState(false);
     const [showingEdit, setShowingEdit] = useState(undefined);
     const [showingDeleteDialog, setShowingDeleteDialog] = useState(false);
-
+    const [frameLoaded, setFrameLoaded] = useState(false);
     const [webpageEditable, setWebpageEditable] = useState(false);
 
     const [newImages, setNewImages] = useState([]);
@@ -74,7 +73,7 @@ export default function CMS({
     const [showingAdditionalDate, setShowingAdditionalDate] = useState(false);
     const [additionalDate, setAdditionalDate] = useState(new Date());
 
-    const [editType, setEditType] = useState(0)
+    const [editType, setEditType] = useState(0);
 
     const [storage, setStorage] = useState();
 
@@ -94,7 +93,7 @@ export default function CMS({
                     // var isAnonymous = user.isAnonymous;
                     // var uid = user.uid;
                     // var providerData = user.providerData;
-                    console.log('Login complete: ', user.uid);
+                    // console.log('Login complete: ', user.uid);
                     setCurrentEmail(user.email);
                     setCurrentUser(user);
                     // console.log(user);
@@ -102,7 +101,7 @@ export default function CMS({
                     setLoginComplete(true);
                     setCurrentUid(user.uid);
                 } else {
-                    console.log('Not signed in');
+                    // console.log('Not signed in');
                     setLoginComplete(true);
                     setCurrentUid("");
                     setCurrentUser("");
@@ -177,7 +176,7 @@ export default function CMS({
     const init = () => {
         // console.log("currentUid: ", currentUid);
         loadWebpageDataFromUid().then(pageData => {
-            console.log('init pageData!!!!: ', pageData);
+            // console.log('init pageData!!!!: ', pageData);
             if(!pageData && loginComplete){
                 firebase.auth().signOut();
                 return;
@@ -200,7 +199,7 @@ export default function CMS({
     }
 
     const loadWebpageDataFromUid = async () => {
-        console.log('projectName: ', currentUid, projectName);
+        // console.log('projectName: ', currentUid, projectName);
         if(!db || !currentUid || !loginComplete) return {sections:[]};
         return db.collection('CMS')
             .doc(projectName)
@@ -247,7 +246,7 @@ export default function CMS({
     const [, updatePageData] = useState();
 
     const loadAllSectionData = async (data) => {
-        console.log(data)
+        // console.log(data)
         if(!data.sections) return;
         const promises = [];
         const out = {};
@@ -744,7 +743,7 @@ export default function CMS({
     }
 
     // console.log("additionalDate: ", additionalDate);
-    console.log('loginComplete: ', loginComplete, currentUid, !currentUid && loginComplete);
+    // console.log('loginComplete: ', loginComplete, currentUid, !currentUid && loginComplete);
     return(
         <div className="CMS">
             <Helmet>
@@ -752,6 +751,7 @@ export default function CMS({
                 <title>Update your website</title>
                 <link rel="icon" type="image/png" href="blank.ico" sizes="16x16" />
             </Helmet>
+            <UpdatePage projectName={projectName} db={db} frameLoaded={frameLoaded} />
             {
                 !currentUid && loginComplete &&
                 <div className="overlay">
@@ -818,7 +818,7 @@ export default function CMS({
                 </div>
                 <div className="right">
                     { editType === 0
-                        ? <WebpageEditor pageData={pageData} />
+                        ? <WebpageEditor /*pageData={pageData}*/ setFrameLoaded={setFrameLoaded} children={children} />
                         : <React.Fragment>
                             <div className="top">
                                 <div className="header">
