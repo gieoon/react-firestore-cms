@@ -36,7 +36,7 @@ export default function WebpageEditor({
                 width="100%"
                 // initialContent='<!DOCTYPE html><html><head><style>body:{margin:0;}</style></head><body></body></html>'
                 contentDidMount={()=>{
-                    console.log('Frame mounted!!!: ');
+                    // console.log('Frame mounted!!!: ');
                     setFrameLoaded(true);
                 }}
             >

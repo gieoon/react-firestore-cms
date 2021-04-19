@@ -4,7 +4,7 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {Helmet} from "react-helmet";
 // import firebase from 'firebase/app';
-import firebase from "firebase";
+// import firebase from "firebase";
 // import 'firebase/firestore';
 // import 'firebase/auth';
 // import 'firebase/storage';
@@ -32,20 +32,21 @@ import WebpageEditor from './webpageEditor.js';
 // pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 import UpdatePage from './UpdatePage.js';
 
-import firebaseConfig from './config';
-/* 
-    Your Firebase config file via 
-    1. Firebase console
-    2. Click on Project Settings to get this
-    3. Save to an external folder and import here.
-*/
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+// import firebaseConfig from './config';
 
 export default function CMS({
+    db,
+    firebase,
     projectName,
+    collectionName,
+    collectionWebsiteContent,
     children,
 }){
+    useEffect(()=>{
+        // firebase.initializeApp(firebaseConfig);
+        // db = firebase.firestore();
+    }, []);
+
     const [loginComplete, setLoginComplete] = useState(false);
     const [currentUid, setCurrentUid] = useState();
     const [currentUser, setCurrentUser] = useState({});
@@ -159,13 +160,13 @@ export default function CMS({
     // Try and set some dummy data to check if it's possible
     const authTest = () => {
         if(!db) return;
-        db.collection('CMS') 
+        db.collection(collectionName) 
             .doc(projectName)
             .set({
                 lastLogin: firebase.firestore.FieldValue.serverTimestamp()
             }, {merge: true})
             .then((e) => {
-                console.log(e);
+                // console.log(e);
             }).catch(err => {
                 console.error("Error in authTest: ", err);
                 firebase.auth().signOut();
@@ -201,7 +202,7 @@ export default function CMS({
     const loadWebpageDataFromUid = async () => {
         // console.log('projectName: ', currentUid, projectName);
         if(!db || !currentUid || !loginComplete) return {sections:[]};
-        return db.collection('CMS')
+        return db.collection(collectionName)
             .doc(projectName)
             .get()
             .then(doc => {
@@ -270,7 +271,7 @@ export default function CMS({
 
     const loadSectionData = async (sectionName, data) => {
         // console.log('Loading data for: ', sectionName);
-        return db.collection('CMS')
+        return db.collection(collectionName)
             .doc(projectName)
             .collection(sectionName)
             // .orderBy('createdOn', 'desc')
@@ -483,7 +484,7 @@ export default function CMS({
         
             // console.log('SAVING: ', d);
 
-        db.collection('CMS')
+        db.collection(collectionName)
             .doc(projectName)
             .collection(sectionName)
             .doc(id)
@@ -687,7 +688,7 @@ export default function CMS({
             }
         }
 
-        db.collection('CMS')
+        db.collection(collectionName)
             .doc(projectName)    
             .collection(sectionName)
             .doc(entry.id)
@@ -819,7 +820,12 @@ export default function CMS({
                     { editType === 0
                         ? <WebpageEditor /*pageData={pageData}*/ setFrameLoaded={setFrameLoaded} /*children={children}*/>
                             {children}
-                            <UpdatePage projectName={projectName} db={db} frameLoaded={frameLoaded} />
+                            <UpdatePage 
+                                projectName={projectName} 
+                                collectionWebsiteContent={collectionWebsiteContent}
+                                db={db} 
+                                frameLoaded={frameLoaded} 
+                            />
                         </WebpageEditor>
                         : <React.Fragment>
                             <div className="top">

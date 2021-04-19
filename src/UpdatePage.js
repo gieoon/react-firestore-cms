@@ -13,6 +13,7 @@ const quills = {};
 
 export default function UpdatePage({
     projectName,
+    collectionWebsiteContent,
     db,
     frameLoaded,
 }){
@@ -55,7 +56,7 @@ export default function UpdatePage({
             // console.log('el.querySelector(.cp-editable-btn): ', el.querySelector('.cp-editable-btn') === undefined);
 
             if(!el.querySelector('.cp-editable-btn')){
-                console.log('Adding button');
+                // console.log('Adding button');
                 const dw = getIframe().createElement('div');
                 dw.classList.add("cp-editable-btn-wrapper");
                 // console.log('Adding edit button to element: #', el, el.querySelector('.cp-editable-btn'));
@@ -166,7 +167,7 @@ export default function UpdatePage({
                 }
             }
           };
-        const dbObj = data;//await loadWebsiteContent() || {};
+        const dbObj = /*data;*/await loadWebsiteContent() || {};
         console.log("Loaded dbObj: ", dbObj);
         var sections = parentElement.id.split(/-|~/g);
         // sections.unshift("obj");
@@ -240,10 +241,11 @@ export default function UpdatePage({
 
     const loadWebsiteContent = async () => {
         // console.log('projectName: ', currentUid, projectName);
-        return db.collection('CMS_WebsiteContent')
+        return db.collection(collectionWebsiteContent)
             .doc(projectName)
             .get()
             .then(doc => {
+                console.log(doc.data());
                 return doc.data();
             })
             .catch(err => console.error("Error loading website content: ", err))
@@ -251,7 +253,7 @@ export default function UpdatePage({
 
     const saveWebsiteContent = async (obj) => {
         // console.log('projectName: ', currentUid, projectName);
-        return db.collection('CMS_WebsiteContent')
+        return db.collection(collectionWebsiteContent)
             .doc(projectName)
             .set(obj)
             .then(() => {
@@ -342,12 +344,12 @@ export default function UpdatePage({
 
 
     const highlightEditable = () => {
-        console.log('Highlighting everything!!!');
+        // console.log('Highlighting everything!!!');
         addEditButton();
 
         // Attach CSS to head
         const root = getIframe();
-        console.log("root: ", root);
+        // console.log("root: ", root);
         root.head.insertAdjacentHTML('beforeend', `
             <style>
                 .cp-editable {

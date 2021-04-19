@@ -1,5 +1,14 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './index.css';
+import firebase from "firebase";
+/* 
+    Your Firebase Configuration via 
+    1. Firebase console
+    2. Click on Project Settings to get this
+    3. Save to an external folder and import here.
+*/
+
+import firebaseConfig from './config.js';
 
 import CMS from 'react-firestore-cms'
 import 'react-firestore-cms/dist/cms.css';
@@ -7,8 +16,13 @@ import 'react-firestore-cms/dist/loading.css';
 import 'react-firestore-cms/dist/index.css';
 import 'react-firestore-cms/dist/app.css';
 
-const MyWebsite = () => {
-  const data = {
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+const MyWebsite = ({db}) => {
+
+  // Default data.
+  const d = {
     name: "Jason",
     surname: "Briggs",
     description: "This is a paragraph that can be changed by pressing the edit button on the bottom right.",
@@ -45,6 +59,16 @@ const MyWebsite = () => {
 
     }
   };
+  const [data, setData] = useState(d);
+
+  useEffect(()=>{
+    db.collection("CMS_WebsiteContent")
+      .doc("test")
+      .get()
+      .then(doc => {
+        setData(doc.data());
+      })
+  }, [db]);
 
   return (
     <div>
@@ -93,7 +117,14 @@ const MyWebsite = () => {
 }
 
 const App = () => {
-  return <CMS projectName="test" children={<MyWebsite />} />
+  return <CMS 
+    projectName="test" 
+    children={<MyWebsite db={db} />} 
+    db={db} 
+    firebase={firebase}
+    collectionName="CMS"
+    collectionWebsiteContent="CMS_WebsiteContent"
+  />
 }
 
 export default App
