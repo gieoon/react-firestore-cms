@@ -11,6 +11,10 @@ This is a CMS to be plugged into your React website clientside to create managem
 
 The CMS can be placed at a child URL.
 
+## Live Demo
+
+https://gieoon.github.io/react-firestore-cms/
+
 ### Core Features:
 
 #### Authentication:
@@ -79,6 +83,7 @@ class Example extends Component {
       projectName="test" 
       children={<MyWebsite />} 
       db={this.state.db} 
+      firebase={firebase}
       collectionName="CMS"
       collectionWebsiteContent="CMS_WebsiteContent" 
     />
