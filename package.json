@@ -1,6 +1,6 @@
 {
   "name": "react-firestore-cms",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A CMS (Content Management System) using React with a Firestore backend, that lets clients of Web Developers update their webpage content freely. An alternative to Wordpress.",
   "author": "gieoon",
   "license": "MIT",

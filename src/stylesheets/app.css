@@ -1,0 +1,2296 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+* {
+  font-family: "Merriweather Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+body {
+  margin: 0;
+}
+iframe {
+  border: none !important;
+}
+.Tag {
+  margin-left: 4px;
+  margin-bottom: -10px;
+  transform: rotate(-25deg);
+}
+.SheetPage {
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+}
+.SheetPage .TemplateOverlay {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  opacity: 0;
+  pointer-events: none;
+  background-color: rgba(0, 0, 0, 0.65);
+  transition: opacity 125ms linear;
+  z-index: 9998;
+}
+.SheetPage .TemplateOverlay.show {
+  opacity: 1;
+  pointer-events: all;
+}
+.SheetPage .TemplateSwapper {
+  position: fixed;
+  background-color: white;
+  border-bottom-right-radius: 16px;
+  transition: all 125ms linear;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  margin: auto;
+  width: fit-content;
+  min-width: 460px;
+  height: fit-content;
+  color: rgba(0, 0, 0, 0.9);
+  transform: translateY(-100vh);
+  transition: all 125ms linear;
+  padding: 1rem;
+  border-radius: 4px;
+  z-index: 99999;
+  box-shadow: 0px 0px 6px rgba(255, 255, 255, 0.35);
+}
+.SheetPage .TemplateSwapper.show {
+  transform: translateY(0vh);
+}
+.SheetPage .TemplateSwapper span {
+  line-height: 0.5rem;
+}
+.SheetPage .TemplateSwapper .title-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+.SheetPage .TemplateSwapper .title-wrapper h2 {
+  margin: auto 0;
+}
+.SheetPage .TemplateSwapper .title-wrapper svg {
+  margin: auto 0;
+  cursor: pointer;
+}
+.SheetPage .TemplateSwapper .contents {
+  max-height: 75vh;
+  overflow: scroll;
+}
+.SheetPage .TemplateSwapper .contents .TemplateItem {
+  background-color: #090918;
+  border-radius: 4px;
+  margin: 0.5rem auto;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+.SheetPage .TemplateSwapper .contents .TemplateItem.selected {
+  background-color: #ff6f1c !important;
+}
+.SheetPage .TemplateSwapper .contents .TemplateItem:hover {
+  background-color: rgba(51, 51, 51, 0.5);
+}
+.SheetPage .TemplateSwapper .contents .TemplateItem .title {
+  color: white;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+.SheetPage .TemplateSwapper .contents .TemplateItem .description {
+  margin-top: 0.25rem;
+  display: block;
+  color: white;
+  font-weight: 200;
+  font-size: 1rem;
+  /*.EditBtn {
+   background-color: $primary-color;
+   padding: .5rem .5rem;
+   text-align: center;
+   cursor: pointer;
+   transition: all $anim-duration linear;
+   position: fixed;
+   // margin: auto;
+   left: 0;
+   top: 0;
+   z-index: 99999;
+   width: fit-content;
+   border-bottom-right-radius: 4px;
+   display: flex;
+   a {
+   color: white!important;
+   }
+   span {
+   line-height: .5rem;
+   font-size: .75rem;
+   margin-right: 6px;
+   }
+   :nth-child(2){
+   // margin-top: .5rem;
+   margin-left: .5rem;
+   }
+   :nth-child(3) {
+   margin-left: .5rem;
+   }
+   // &:hover {
+   //     background-color: $hover-color;
+   // }
+   }*/
+  /*.Publish {
+   position: fixed;
+   top: 0;
+   right: 0;
+   background-color: $primary-color;
+   padding: .5rem;
+   text-align: center;
+   cursor: pointer;
+   transition: all $anim-duration linear;
+   position: fixed;
+   z-index: 99999;
+   border-bottom-left-radius: 4px;
+   }*/
+}
+.SheetPage .EditingScreen {
+  min-height: 100vh;
+  max-height: 100vh;
+  max-width: 200px;
+  min-width: 50px;
+  width: 65px;
+  background-color: #090918;
+  color: white;
+  overflow: none;
+  transition: all 125ms linear;
+}
+.SheetPage .EditingScreen.showing {
+  width: 275px;
+  min-width: 275px;
+}
+.SheetPage .EditingScreen .EditBtn {
+  height: 15vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.35);
+}
+.SheetPage .EditingScreen .EditBtn .link-wrapper {
+  display: block;
+  text-decoration: none;
+  padding: 0.5rem 0;
+  text-align: center;
+  cursor: pointer;
+}
+.SheetPage .EditingScreen .EditBtn .link-wrapper.showing {
+  display: -webkit-box;
+  padding: 0.5rem 1rem;
+  text-align: left;
+}
+.SheetPage .EditingScreen .EditBtn .link-wrapper.showing svg {
+  margin-right: 0.75rem;
+}
+.SheetPage .EditingScreen .EditBtn .link-wrapper:hover {
+  background-color: rgba(51, 51, 51, 0.5);
+}
+.SheetPage .EditingScreen .EditBtn .link-wrapper svg {
+  color: white;
+}
+.SheetPage .EditingScreen .EditBtn .link-wrapper div {
+  margin-top: 2px;
+  color: white;
+  opacity: 1;
+  transition: all 125ms linear;
+  pointer-events: none;
+}
+.SheetPage .EditingScreen .EditBtn .link-wrapper div:not(.showing) {
+  opacity: 0;
+  display: none;
+}
+.SheetPage .EditingScreen .Top {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 86px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.35);
+}
+.SheetPage .EditingScreen .Top .title {
+  display: block;
+  font-size: 28px;
+  padding-left: 1rem;
+  font-weight: 800;
+}
+.SheetPage .EditingScreen .Top svg {
+  margin-left: 5px;
+  margin-bottom: -5px;
+  transform: rotate(-25deg);
+}
+.SheetPage .EditingScreen .Top .logo-closed {
+  margin: auto;
+}
+.SheetPage .EditingScreen .Top .subtitle {
+  padding-left: 1rem;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.65);
+}
+.SheetPage .EditingScreen .main-area {
+  min-height: calc(100vh - 86px - 50px - 42px - 50px);
+  max-height: calc(100vh - 86px - 50px - 42px - 50px);
+  overflow: scroll;
+  background-color: #232323;
+}
+.SheetPage .EditingScreen .main-area .SinglePressButton {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  transition: all 125ms linear;
+  padding: 1.25rem 1rem;
+  background-color: #0f0f0f;
+}
+.SheetPage .EditingScreen .main-area .SinglePressButton:hover {
+  background-color: rgba(51, 51, 51, 0.5);
+}
+.SheetPage .EditingScreen .main-area .SinglePressButton.selected {
+  background-color: #ff6f1c;
+}
+.SheetPage .EditingScreen .main-area .SinglePressButton * {
+  z-index: 99999;
+}
+.SheetPage .EditingScreen .main-area .SinglePressButton svg {
+  margin-bottom: -4px;
+  margin-right: 8px;
+}
+.SheetPage .EditingScreen .main-area .SinglePressButton p {
+  font-size: 22px;
+  display: inline;
+  font-weight: 800;
+  margin: 0;
+  margin-top: 6px;
+}
+.SheetPage .EditingScreen .main-area .SinglePressButton .subtitle {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  display: block;
+  font-weight: 400;
+}
+.SheetPage .EditingScreen .main-area .ExpandableButton {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  transition: all 125ms linear;
+  background-color: #0f0f0f;
+}
+.SheetPage .EditingScreen .main-area .ExpandableButton .wrapper {
+  padding: 1.25rem 1rem;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+}
+.SheetPage .EditingScreen .main-area .ExpandableButton .wrapper:hover {
+  background-color: rgba(51, 51, 51, 0.5);
+}
+.SheetPage .EditingScreen .main-area .ExpandableButton .wrapper svg {
+  margin-bottom: -4px;
+  margin-right: 8px;
+}
+.SheetPage .EditingScreen .main-area .ExpandableButton .wrapper p {
+  font-size: 22px;
+  display: inline;
+  font-weight: 800;
+  margin: 0;
+  margin-top: 6px;
+}
+.SheetPage .EditingScreen .main-area .ExpandableButton .wrapper .subtitle {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  display: block;
+  font-weight: 400;
+}
+.SheetPage .EditingScreen .main-area .ExpandableButton .wrapper .arrow {
+  opacity: 0;
+  transition: all 125ms linear;
+}
+.SheetPage .EditingScreen .main-area .ExpandableButton .wrapper .arrow.showing {
+  transform: rotate(180deg);
+  opacity: 1;
+}
+.SheetPage .EditingScreen .TemplateViewer .contents .TemplateItem {
+  background-color: #090918;
+  padding: 1rem 1rem;
+  cursor: pointer;
+  border-bottom: rgba(255, 255, 255, 0.35);
+  transition: all 125ms linear;
+}
+.SheetPage .EditingScreen .TemplateViewer .contents .TemplateItem.selected {
+  background-color: #ff6f1c !important;
+}
+.SheetPage .EditingScreen .TemplateViewer .contents .TemplateItem:hover {
+  background-color: rgba(51, 51, 51, 0.5);
+}
+.SheetPage .EditingScreen .TemplateViewer .contents .TemplateItem:not(.showing) {
+  height: 4vh;
+  text-align: center;
+  padding: 1rem 0;
+}
+.SheetPage .EditingScreen .TemplateViewer .contents .TemplateItem:not(.showing) .title, .SheetPage .EditingScreen .TemplateViewer .contents .TemplateItem:not(.showing) .description {
+  opacity: 0;
+  display: none;
+}
+.SheetPage .EditingScreen .TemplateViewer .contents .TemplateItem:not(.showing) svg {
+  opacity: 1;
+}
+.SheetPage .EditingScreen .TemplateViewer .contents .TemplateItem .title {
+  color: white;
+  font-weight: 600;
+  font-size: 20px;
+  opacity: 1;
+  transition: opacity 125ms linear;
+}
+.SheetPage .EditingScreen .TemplateViewer .contents .TemplateItem .description {
+  margin-top: 0.25rem;
+  display: block;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 400;
+  font-size: 14px;
+  opacity: 1;
+  transition: opacity 125ms linear;
+}
+.SheetPage .EditingScreen .TemplateViewer .contents .TemplateItem svg {
+  transition: all 125ms linear;
+  opacity: 1;
+  margin: auto 0;
+}
+.SheetPage .EditingScreen .TemplateViewer .contents .TemplateItem svg.showing {
+  opacity: 0;
+  display: none;
+}
+.SheetPage .EditingScreen a {
+  text-decoration: none;
+  color: white;
+}
+.SheetPage .EditingScreen .Publish {
+  height: 50px;
+  border-top: 2px solid rgba(255, 255, 255, 0.35);
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  background-color: #090918;
+  z-index: 9999;
+}
+.SheetPage .EditingScreen .Publish:hover {
+  background-color: rgba(51, 51, 51, 0.5);
+}
+.SheetPage .EditingScreen .Publish:hover a, .SheetPage .EditingScreen .Publish:hover p {
+  color: #ff6f1c;
+}
+.SheetPage .EditingScreen .Publish:hover a svg, .SheetPage .EditingScreen .Publish:hover p svg {
+  color: #ff6f1c;
+  transform: scale(1.15);
+}
+.SheetPage .EditingScreen .Publish div {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.85);
+}
+.SheetPage .EditingScreen .Publish div p {
+  text-align: center;
+}
+.SheetPage .EditingScreen .Publish div p svg {
+  margin-bottom: -6px;
+}
+.SheetPage .EditingScreen .Publish span {
+  opacity: 1;
+  transition: all 125ms linear;
+  text-decoration: none;
+}
+.SheetPage .EditingScreen .Publish span:not(.showing) {
+  opacity: 0;
+  pointer-events: none;
+  margin-left: 0;
+  display: none;
+}
+.SheetPage .EditingScreen .Account {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+  min-height: 50px;
+  max-height: 50px;
+  align-items: center;
+}
+.SheetPage .EditingScreen .Account .profile-wrapper {
+  display: flex;
+  justify-content: flex-start;
+}
+.SheetPage .EditingScreen .Account .profile-wrapper img {
+  width: 50px;
+  height: 50px;
+}
+.SheetPage .EditingScreen .Account .profile-wrapper .details-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+  margin-left: 12px;
+}
+.SheetPage .EditingScreen .Account .profile-wrapper .details-wrapper .displayName {
+  font-size: 18px;
+}
+.SheetPage .EditingScreen .Account .profile-wrapper .details-wrapper .email {
+  font-size: 14px;
+  opacity: 0.67;
+}
+.SheetPage .EditingScreen .Account .empty-account-wrapper {
+  padding: 6px;
+  cursor: pointer;
+  margin: auto;
+  overflow: hidden;
+}
+.SheetPage .EditingScreen .Account .empty-account-wrapper > div {
+  display: flex;
+  justify-content: space-between;
+}
+.SheetPage .EditingScreen .Account .empty-account-wrapper:hover span {
+  color: #ff6f1c;
+}
+.SheetPage .EditingScreen .Account .empty-account-wrapper:hover svg {
+  color: #ff6f1c;
+  transform: scale(1.15);
+}
+.SheetPage .EditingScreen .Account .empty-account-wrapper span {
+  opacity: 0;
+  font-size: 0rem;
+  margin-left: 10px;
+  transition: color 125ms ease, opacity 125ms ease, font-size 125ms ease;
+}
+.SheetPage .EditingScreen .Account .empty-account-wrapper span.expanded {
+  opacity: 1;
+  display: block;
+  font-size: 0.9rem;
+}
+.SheetPage .EditingScreen .Account .empty-account-wrapper svg {
+  color: white;
+  margin: auto;
+  margin-top: 6px;
+  opacity: 1;
+}
+.SheetPage .EditingScreen .Account svg {
+  color: #d0d0d0;
+  cursor: pointer;
+  opacity: 0.67;
+  transition: opacity 75ms linear;
+  margin-right: 8px;
+}
+.SheetPage .EditingScreen .Account svg:hover {
+  opacity: 1;
+}
+.SheetPage .EditingScreen .expand-wrapper {
+  height: 42px;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+}
+.SheetPage .EditingScreen .expand-wrapper.showing {
+  justify-content: flex-end;
+  padding-right: 1rem;
+}
+.SheetPage .EditingScreen .expand-wrapper:hover {
+  background-color: rgba(51, 51, 51, 0.5);
+}
+.SheetPage .EditingScreen .expand-wrapper:hover svg {
+  color: #ff6f1c;
+}
+.SheetPage .EditingScreen .expand-wrapper svg {
+  transition: all 125ms linear;
+  margin: auto 0;
+}
+.SheetPage .EditingScreen .expand-wrapper svg.showing {
+  transform: rotate(180deg);
+}
+.SheetPage .Template-wrapper {
+  width: 100%;
+  position: relative;
+  max-height: 100vh;
+  overflow: scroll;
+}
+.SheetPage .Template-wrapper .TopFrame {
+  height: 64px;
+  background-color: #090918;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 2px 10px -1px rgba(0, 0, 0, 0.12);
+}
+.SheetPage .Template-wrapper .TopFrame .title {
+  color: white;
+  font-size: 18px;
+}
+.SheetPage .Template-wrapper .TopFrame .button-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.SheetPage .Template-wrapper .TopFrame .regenerate, .SheetPage .Template-wrapper .TopFrame .useDesign {
+  border-radius: 2px;
+  padding: 0.5rem 0.75rem;
+  background-color: white;
+  transition: all 125ms ease;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.SheetPage .Template-wrapper .TopFrame .regenerate svg, .SheetPage .Template-wrapper .TopFrame .useDesign svg {
+  margin-left: 6px;
+}
+.SheetPage .Template-wrapper .TopFrame .regenerate span, .SheetPage .Template-wrapper .TopFrame .useDesign span {
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+.SheetPage .Template-wrapper .TopFrame .regenerate:hover, .SheetPage .Template-wrapper .TopFrame .useDesign:hover {
+  background-color: rgba(51, 51, 51, 0.5);
+  color: white;
+}
+.SheetPage .Template-wrapper .TopFrame .regenerate:nth-child(2), .SheetPage .Template-wrapper .TopFrame .useDesign:nth-child(2) {
+  margin-left: 20px;
+}
+.SheetPage .SheetSVG {
+  transform: scale(1);
+  transition: all 62.5ms linear;
+  margin-right: 6px;
+}
+.SheetPage .SheetSVG:hover {
+  transform: scale(1.15);
+}
+.SheetPage #new_spreadsheet {
+  background-color: #090918;
+  color: white;
+  border-radius: 12px;
+  width: fit-content;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-weight: bold;
+  margin: auto;
+  transition: all 125ms linear;
+}
+.SheetPage #new_spreadsheet:hover {
+  background-color: rgba(51, 51, 51, 0.5);
+}
+.Pricing p {
+  text-align: center;
+}
+.Pricing .pricing-header {
+  font-size: 8.2rem;
+  width: 75%;
+  margin: auto;
+}
+.Pricing .pricing-header span {
+  display: block;
+}
+.Pricing .pricing-header span:after {
+  content: '.';
+  font-size: 6.5rem;
+}
+.Pricing .Wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+}
+.PricingCard {
+  background-color: #EEE;
+  margin: 1rem;
+  padding: 1rem;
+  color: black;
+  max-width: 45vw;
+  width: 300px;
+  height: 250px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 125ms linear;
+}
+.PricingCard h1, .PricingCard h2 {
+  text-align: center;
+  font-size: 1.7rem !important;
+}
+.PricingCard .price {
+  font-weight: bold;
+  font-size: 1.1rem;
+  text-align: center;
+}
+.PricingCard:hover {
+  background-color: rgba(51, 51, 51, 0.5);
+  color: white;
+}
+.Editable {
+  transition: all 125ms linear;
+  position: relative;
+}
+.Editable .controls {
+  pointer-events: none;
+  opacity: 0;
+  position: absolute;
+  z-index: 99;
+  background-color: white;
+  border-bottom-left-radius: 4px;
+  padding: 0.25rem;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
+  top: 0;
+  right: 0;
+}
+.Editable:hover .controls {
+  opacity: 1;
+  pointer-events: all;
+}
+.Editable * {
+  transition: all 125ms linear;
+}
+.SettingsPopup .overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: 9999;
+  transition: opacity 125ms linear;
+  pointer-events: none;
+}
+.SettingsPopup .overlay.show {
+  opacity: 1;
+  pointer-events: all;
+}
+.SettingsPopup .content {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-radius: 6px;
+  transform: translateY(-100vh);
+  transition: all 125ms linear;
+  z-index: 10000;
+  background-color: white;
+  width: fit-content;
+  min-width: 560px;
+  height: fit-content;
+  margin: auto;
+  padding: 0;
+}
+.SettingsPopup .content p, .SettingsPopup .content label {
+  color: rgba(15, 15, 15, 0.9);
+}
+.SettingsPopup .content .content-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+  background-color: #090918;
+  border-top-right-radius: 6px;
+  border-top-left-radius: 6px;
+}
+.SettingsPopup .content .content-inner {
+  padding-bottom: 0.5rem;
+  max-height: 75vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding-right: 1rem;
+  padding-left: 1rem;
+}
+.SettingsPopup .content .content-inner .content-social-wrapper {
+  padding: 0.5rem 0;
+  border-radius: 6px;
+  margin-bottom: 24px;
+}
+.SettingsPopup .content .content-inner h4 {
+  margin-top: 1rem;
+}
+.SettingsPopup .content .content-inner p {
+  margin-bottom: 0.25rem;
+}
+.SettingsPopup .content.show {
+  transform: translateY(0);
+}
+.SettingsPopup .content h2 {
+  padding: 0.5rem 1rem;
+  margin: auto;
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+.SettingsPopup .submit-wrapper {
+  width: 100%;
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  background-color: whitesmoke;
+}
+.SettingsPopup .submit-wrapper .submit {
+  margin: auto;
+  background-color: #090918;
+  color: white;
+  font-weight: 600;
+  font-size: 1.15rem;
+  width: fit-content;
+  padding: 0.25rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 125ms linear;
+}
+.SettingsPopup .submit-wrapper .submit:hover {
+  background-color: rgba(51, 51, 51, 0.5);
+}
+.SettingsPopup input, .SettingsPopup textarea {
+  display: block;
+  margin: auto;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 14px;
+  margin-right: 1.5rem;
+}
+.SettingsPopup .settings-wrapper .settings-help {
+  position: absolute;
+  right: 0;
+  transition: all 62.5ms linear;
+  width: 1rem;
+  top: -0.25rem;
+  margin: auto;
+}
+.SettingsPopup .settings-wrapper .settings-help svg {
+  width: 1rem;
+  cursor: pointer;
+}
+.SettingsPopup .settings-wrapper .settings-help:hover {
+  transform: scale(1.15);
+}
+.SettingsPopup .settings-wrapper .settings-description {
+  position: absolute;
+  opacity: 0;
+  width: fit-content;
+  pointer-events: none;
+  right: 1.25rem;
+  top: -0.1rem;
+  background-color: white;
+  padding: 0.05rem 0.5rem;
+  border-radius: 6px;
+  background-color: #090918;
+  border: 1px solid #090918;
+  transform: translateX(200%);
+  transition: all 62.5ms linear;
+}
+.SettingsPopup .settings-wrapper .settings-description.show {
+  opacity: 1;
+  transform: translateX(0%);
+}
+.SettingsPopup .settings-wrapper .settings-description label {
+  margin: 0;
+  font-size: 0.85rem;
+  color: white;
+}
+.SettingsPopup .inputObj {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+.SettingsPopup .inputObj:not(.social) {
+  flex-direction: row-reverse;
+}
+.SettingsPopup .inputObj:not(.social) input {
+  width: calc(100% - 1.5rem);
+  margin-left: 0px;
+}
+.SettingsPopup .inputObj img {
+  margin-right: 1rem;
+  height: 24px;
+  margin-top: 0.2rem;
+}
+.SettingsPopup .inputObj label {
+  margin-right: 0.5rem;
+  font-size: 1rem;
+  display: block;
+}
+.SettingsPopup .textareaObj {
+  display: flex;
+  position: relative;
+}
+.SettingsPopup .textareaObj:not(.social) {
+  flex-direction: row-reverse;
+}
+.SettingsPopup .textareaObj:not(.social) textarea {
+  width: calc(100% - 1.5rem);
+  margin-left: 0px;
+}
+.SettingsPopup .textareaObj label {
+  margin-right: 0.5rem;
+  font-size: 0.85rem;
+}
+.SettingsPopup .fileObj {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.SettingsPopup .fileObj .description {
+  font-size: 0.75rem;
+  color: rgba(0, 0, 0, 0.75);
+  margin-top: 0.5rem;
+}
+.cms-page {
+  padding: 0.5rem 1rem;
+  background-color: #090918;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+}
+.cms-page:hover {
+  background-color: rgba(51, 51, 51, 0.5);
+}
+.cms-page p {
+  font-size: 16px;
+}
+.CreateNewPage {
+  display: flex;
+  background-color: #090918;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  align-items: center;
+  margin-bottom: -2px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+}
+.CreateNewPage:hover p {
+  color: #ff6f1c;
+}
+.CreateNewPage svg {
+  margin-right: 6px;
+}
+.CreateNewPage p {
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 125ms linear;
+}
+.CreateNewPage .input-wrapper {
+  position: relative;
+  margin: 1em 0;
+  display: flex;
+  justify-content: center;
+}
+.CreateNewPage .input-wrapper input {
+  padding: 0.25rem 0.5rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  border: none;
+  outline: none;
+  width: calc(100% - 30px);
+}
+.CreateNewPage .input-wrapper svg {
+  background-color: black;
+  padding: 0.25rem 0.5rem;
+  color: lightgreen;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  margin-top: -1px;
+  margin-bottom: -1px;
+  border-left: none;
+  width: 30px;
+}
+.CreateNewPage .input-wrapper svg:hover {
+  background-color: rgba(51, 51, 51, 0.5);
+}
+.SettingsInline {
+  max-height: 100vh;
+  overflow: scroll;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+.SettingsInline .top {
+  background-color: #090918;
+  height: 54px;
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  border-left: 1px solid rgba(255, 255, 255, 0.35);
+}
+.SettingsInline .top > div {
+  height: 100%;
+  width: 100%;
+  color: white;
+  cursor: pointer;
+  transition: all 125ms linear;
+  font-weight: 800;
+  position: relative;
+  border-right: 1px solid rgba(255, 255, 255, 0.35);
+}
+.SettingsInline .top > div.selected {
+  background-color: #ff6f1c;
+}
+.SettingsInline .top > div > div {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+}
+.SettingsInline :not(input).content {
+  padding-left: 1rem;
+  flex-grow: 1;
+  max-height: calc(100vh - 54px - 54px);
+  overflow: scroll;
+}
+.SettingsInline :not(input).contentdiv {
+  padding-bottom: 24px;
+}
+.SettingsInline :not(input).content .testimonial-add {
+  background-color: #ff6f1c;
+  width: fit-content;
+  border-radius: 4px;
+  cursor: pointer;
+  height: 32px;
+  margin-bottom: 24px;
+}
+.SettingsInline :not(input).content .testimonial-add:hover {
+  background-color: #fc8039;
+}
+.SettingsInline :not(input).content .testimonial-add svg {
+  color: white;
+  pointer-events: none;
+}
+.SettingsInline .fileObj {
+  margin-bottom: 22px;
+}
+.SettingsInline .fileObj .image-upload-wrapper svg {
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.5);
+  padding: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 125ms linear;
+  min-height: 75px;
+  min-width: 75px;
+}
+.SettingsInline .fileObj .image-upload-wrapper svg:hover {
+  background-color: #ff6f1c;
+  color: white;
+}
+.SettingsInline .TestimonialInput {
+  border-top: 4px solid #ff6f1c;
+  width: 85%;
+  padding-bottom: 24px;
+  padding-top: 12px;
+  display: flex;
+  justify-content: space-between;
+}
+.SettingsInline .TestimonialInput input {
+  padding-left: 8px;
+}
+.SettingsInline .TestimonialInput .content-wrapper {
+  width: 100%;
+}
+.SettingsInline .TestimonialInput .testimonial-remove {
+  background-color: #090918;
+  border-radius: 4px;
+  width: fit-content;
+  height: 24px;
+  cursor: pointer;
+  margin-top: 24px;
+  padding: 4px;
+}
+.SettingsInline .TestimonialInput .testimonial-remove:hover {
+  background-color: rgba(51, 51, 51, 0.5);
+}
+.SettingsInline .TestimonialInput .testimonial-remove svg {
+  color: white;
+}
+.SettingsInline .content {
+  overflow-y: hidden;
+}
+.SettingsInline .content:not(input) {
+  padding-left: 0 !important;
+}
+.SettingsInline .content .multipage-wrapper {
+  display: flex;
+  transition: all 125ms ease;
+  position: relative;
+  max-height: calc(100vh - 55px - 54px);
+  clear: both;
+  width: 100%;
+  max-width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+.SettingsInline .content .multipage-wrapper > div {
+  min-width: calc(100% - 1rem);
+  max-width: calc(100% - 1rem);
+  width: calc(100% - 1rem);
+  max-height: calc(100vh - 55px - 54px);
+  min-height: calc(100vh - 55px - 54px);
+  overflow-y: scroll;
+  padding-left: 1rem;
+  clear: both;
+  transition: all 125ms ease;
+  position: absolute;
+}
+.SettingsInline .content .multipage-wrapper > div input {
+  margin-bottom: 6px;
+}
+.SettingsInline .bottom {
+  min-height: 54px;
+  max-height: 54px;
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+  background-color: whitesmoke;
+}
+.SettingsInline .bottom .submit-wrapper {
+  background-color: #090918;
+  width: fit-content;
+  float: right;
+  margin-right: 24px;
+  margin-top: 12px;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 125ms linear;
+}
+.SettingsInline .bottom .submit-wrapper:hover {
+  background-color: rgba(51, 51, 51, 0.5);
+}
+.SettingsInline .inputObj, .SettingsInline .textareaObj {
+  margin-bottom: 6px;
+}
+.SettingsInline .settings-wrapper {
+  width: 75%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  align-items: flex-end;
+}
+.SettingsInline .settings-wrapper .settings-description {
+  margin-top: 16px;
+  margin-bottom: 6px;
+}
+.SettingsInline label {
+  opacity: 0.75;
+}
+.SettingsInline input {
+  width: 75%;
+  padding: 6px;
+  font-size: 16px;
+  border-radius: 4px;
+  border-width: 1px;
+  outline: none;
+}
+.SettingsInline input::placeholder {
+  opacity: 0.65;
+}
+.SettingsInline p {
+  max-width: 75%;
+}
+.SettingsInline label, .SettingsInline .settings-description {
+  max-width: 75%;
+}
+.SettingsInline h4 {
+  font-size: 32px;
+}
+.SettingsInline textarea {
+  width: 75%;
+  resize: vertical;
+  height: 100px;
+  outline: none;
+  border-radius: 4px;
+  font-size: 16px;
+}
+.SettingsInline .social {
+  margin-top: 18px;
+}
+.SettingsInline .social img {
+  width: 42px;
+  margin-bottom: -12px;
+  margin-right: 12px;
+}
+.SettingsInline .description {
+  color: rgba(0, 0, 0, 0.75);
+  margin-top: 0.5rem;
+  margin-bottom: 10px;
+}
+.ContentList-empty-wrapper {
+  background-color: white !important;
+  height: fit-content;
+  border: 1px solid black;
+  padding: 1.5rem;
+  cursor: pointer;
+  color: black;
+  transition: all 125ms linear;
+  max-width: calc(100vw - 20%);
+  width: 80%;
+  margin: auto;
+  margin-bottom: 6rem;
+  margin-top: 6rem;
+}
+.ContentList-empty-wrapper h2 {
+  font-size: 1.5rem;
+  pointer-events: none;
+  margin: 0;
+  text-decoration: underline;
+  color: black !important;
+}
+.ContentList-empty-wrapper .bottom {
+  font-weight: 600;
+}
+.ContentList-empty-wrapper:hover {
+  background-color: rgba(51, 51, 51, 0.5);
+}
+.cta {
+  width: fit-content;
+  background-color: #090918;
+  transition: all 125ms linear;
+  border-radius: 16px;
+  padding: 0.25rem 0.75rem;
+  cursor: pointer;
+}
+.cta:hover {
+  background-color: rgba(51, 51, 51, 0.5);
+}
+.cta span {
+  color: white;
+  font-size: 20px;
+}
+.cta div {
+  display: inline-block;
+}
+.cta div svg {
+  transition: all 125ms linear;
+  height: 18px;
+  margin-bottom: -4px;
+  stroke-width: 2;
+  margin-left: 0px;
+}
+.PageNotFound {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: white;
+  text-align: center;
+  padding-top: 6rem;
+}
+.Header #Main {
+  display: flex;
+  justify-content: space-between;
+  width: calc(100vw - 6rem);
+  max-width: calc(100vw - 6rem);
+  padding: 1rem 3rem;
+  position: absolute;
+  z-index: 10;
+}
+.Header #Main .logo-wrapper {
+  display: flex;
+}
+.Header #Main .logo-wrapper h2 {
+  color: black;
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0.25rem 0;
+  text-transform: uppercase;
+}
+.Header #Main .logo-wrapper p {
+  color: rgba(0, 0, 0, 0.9);
+  margin-left: 1rem;
+  font-size: 0.85rem;
+  line-height: 4rem;
+  margin-bottom: 0;
+}
+.Header #Main .links-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin: auto 0;
+}
+.Header #Main .links-wrapper a, .Header #Main .links-wrapper div {
+  margin-left: 1.5rem;
+  color: rgba(0, 0, 0, 0.9);
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 125ms linear;
+  text-decoration: none;
+}
+.Header #Main .links-wrapper a:hover, .Header #Main .links-wrapper div:hover {
+  opacity: 0.65;
+}
+footer {
+  margin: 1rem auto 0.5rem;
+  text-align: left;
+  opacity: 0.75;
+  font-size: 0.7rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2rem;
+  max-width: calc(100vw - 4rem);
+  width: calc(100vw - 4rem);
+  position: relative;
+}
+footer .links-wrapper {
+  display: flex;
+  position: absolute;
+  bottom: 1.5rem;
+  right: 2rem;
+}
+footer .links-wrapper a {
+  margin-left: 1rem;
+  color: #090918;
+  text-decoration: none;
+  transition: all 125ms linear;
+  cursor: pointer;
+}
+footer .links-wrapper a:hover {
+  opacity: 0.65;
+}
+.HomePage {
+  color: #0a2540;
+  min-height: 100vh;
+}
+.HomePage .HomepageHeroGradient {
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  max-width: 100vw;
+  height: 85vh;
+  transform: translateY(-25vh) skewY(-12.2deg);
+  overflow-x: hidden;
+}
+.HomePage .HomepageHeroGradient canvas {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+.HomePage .sticky-wrapper {
+  display: flex;
+  position: relative;
+  width: 100vw;
+  max-width: 100vw;
+}
+.HomePage .body {
+  text-align: center;
+  flex-grow: 4;
+  width: 100vw;
+  max-width: 100vw;
+}
+.HomePage .body .title {
+  text-align: left;
+  max-width: calc(100vw - 400px);
+}
+.HomePage .body .title .header {
+  font-size: 92px;
+  line-height: 124px;
+  padding-left: 12px;
+  padding-right: 12px;
+  font-weight: 600;
+  background-color: rgba(255, 165, 0, 0.75);
+}
+.HomePage .body h1, .HomePage .body h2, .HomePage .body p, .HomePage .body label, .HomePage .body .bottomPromo .content, .HomePage .body span {
+  max-width: calc(100vw - 400px - 150px);
+}
+.HomePage .body .section-title {
+  font-size: 2.17em;
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+.HomePage .body .title {
+  margin-top: 10rem;
+  padding-left: 2rem;
+}
+.HomePage .body .title h1 {
+  font-size: 5rem;
+  text-align: left;
+  margin-bottom: 24px;
+  padding-left: 12px;
+}
+.HomePage .body .title p {
+  padding-top: 0;
+  text-align: left;
+  line-height: 1.5rem;
+  font-weight: 400;
+  font-size: 18px;
+}
+.HomePage .body .description {
+  margin-bottom: 4rem;
+}
+.HomePage .body .caption {
+  color: #00d4ff;
+  font-weight: 800;
+  font-size: 1.25rem;
+}
+.HomePage .body a {
+  text-decoration: none;
+}
+.HomePage .body a .websiteCreation {
+  background-color: rgba(255, 255, 255, 0.85);
+  color: black;
+  padding: 0.25rem 1.5rem;
+  border-radius: 6px;
+  margin: auto;
+  margin-top: 2rem;
+  font-size: 2rem;
+  border: 1px solid black;
+  transition: all 125ms linear;
+}
+.HomePage .body a .websiteCreation:hover {
+  background-color: black;
+  color: #090918;
+  border-color: rgba(255, 255, 255, 0.65);
+}
+.HomePage .body .certificates {
+  width: fit-content;
+  padding: 6rem 2rem 2rem;
+}
+.HomePage .body .certificates div {
+  display: inline-grid;
+  margin-left: 0;
+  grid-gap: 50px 25px;
+  grid-template-columns: auto auto auto;
+}
+.HomePage .body .certificates div img {
+  width: 200px;
+}
+.HomePage .body .promo1 {
+  color: #adbdcc;
+  margin-top: 6rem;
+  width: 100%;
+  text-align: left;
+  position: relative;
+}
+.HomePage .body .promo1 .content {
+  padding: 6rem 2rem;
+  z-index: 999;
+  background-color: rgba(10, 37, 64, 0.5);
+}
+.HomePage .body .promo1 .content h2 {
+  color: white;
+}
+.HomePage .body .promo1 .content p {
+  font-weight: 400;
+}
+.HomePage .body .promo1 .content ul {
+  width: fit-content;
+}
+.HomePage .body .promo1 .content ul li {
+  text-align: left;
+  line-height: 1.5rem;
+  font-size: 0.85rem;
+  font-weight: 400;
+  text-decoration: line-through;
+}
+.HomePage .body .promo1 .content ul li:before {
+  content: '';
+}
+.HomePage .body .marketing {
+  text-align: left;
+}
+.HomePage .body .marketing .overlay .content {
+  padding: 6rem 2rem;
+  background-color: rgba(255, 255, 255, 0.85);
+}
+.HomePage .body .marketing .overlay .content .section-title span {
+  color: yellow;
+}
+.HomePage .body .promo2 {
+  text-align: left;
+  margin: 0;
+  background-color: #f6f9fc;
+}
+.HomePage .body .promo2 .overlay .content {
+  background-color: rgba(255, 255, 255, 0.75);
+  padding: 6rem 2rem;
+}
+.HomePage .body .prices {
+  text-align: left;
+  margin: 0;
+}
+.HomePage .body .prices .overlay .content {
+  background-color: rgba(0, 0, 0, 0.65);
+  padding: 6rem 2rem 60vh;
+  position: relative;
+  overflow: hidden;
+}
+.HomePage .body .prices .overlay .content:after {
+  content: "";
+  background-color: #f6f9fc;
+  height: 60vh;
+  width: 120vw;
+  position: absolute;
+  transform: skewY(-12.2deg) translateX(-10vw) translateY(15vh);
+}
+.HomePage .body .prices .overlay .content h2 {
+  color: white;
+}
+.HomePage .body .prices .overlay .content p {
+  color: #adbdcc;
+  font-weight: 400;
+}
+.HomePage .body .bottomPromo {
+  background-color: #f6f9fc;
+  width: 100%;
+}
+.HomePage .body .bottomPromo .content {
+  padding: 30vh 0 5rem;
+}
+.HomePage .body .bottomPromo .content img {
+  width: 260px;
+  height: 140px;
+  object-fit: cover;
+  object-position: bottom;
+}
+.HomePage .body .bottomPromo .content h1 {
+  font-size: 3rem;
+  margin-top: 8px;
+}
+.HomePage .body .bottomPromo .content p {
+  font-weight: 200;
+}
+.HomePage .body .bottomPromo .content svg {
+  stroke-width: 1.5;
+}
+.HomePage .body .unsure {
+  background-color: #f6f9fc;
+  width: 100%;
+  padding: 30vh 0 5rem;
+  text-align: center;
+}
+.HomePage .body .unsure p {
+  margin: auto;
+}
+.HomePage .body .prettyBackground {
+  background-color: silver;
+  background-image: radial-gradient(circle at 100% 150%, silver 24%, white 24%, white 28%, silver 28%, silver 36%, white 36%, white 40%, transparent 40%, transparent), radial-gradient(circle at 0 150%, silver 24%, white 24%, white 28%, silver 28%, silver 36%, white 36%, white 40%, transparent 40%, transparent), radial-gradient(circle at 50% 100%, white 10%, silver 10%, silver 23%, white 23%, white 30%, silver 30%, silver 43%, white 43%, white 50%, silver 50%, silver 63%, white 63%, white 71%, transparent 71%, transparent), radial-gradient(circle at 100% 50%, white 5%, silver 5%, silver 15%, white 15%, white 20%, silver 20%, silver 29%, white 29%, white 34%, silver 34%, silver 44%, white 44%, white 49%, transparent 49%, transparent), radial-gradient(circle at 0 50%, white 5%, silver 5%, silver 15%, white 15%, white 20%, silver 20%, silver 29%, white 29%, white 34%, silver 34%, silver 44%, white 44%, white 49%, transparent 49%, transparent);
+  background-size: 100px 50px;
+}
+.HomePage .projectName-wrapper {
+  min-width: fit-content;
+  height: fit-content;
+  background-color: white;
+  padding: 0.5rem 1rem;
+  margin-top: 40vh;
+  position: -webkit-sticky;
+  position: sticky;
+  z-index: 999;
+  top: 50px;
+  right: 16px;
+  border-radius: 8px;
+  box-shadow: 0 50px 100px -20px rgba(50, 50, 93, 0.25), 0 30px 60px -30px rgba(0, 0, 0, 0.3), 0 0 4px rgba(0, 0, 0, 0.3);
+}
+.HomePage .projectName-wrapper.showing {
+  right: 150px;
+  background-color: transparent;
+  box-shadow: none;
+  top: 15px;
+  margin-bottom: 250px;
+}
+.HomePage .projectName-wrapper.showing h3 {
+  font-size: 36px;
+}
+.HomePage .projectName-wrapper.showing .projectName-sticky {
+  width: 650px;
+}
+.HomePage .projectName-wrapper.showing .projectName-sticky input, .HomePage .projectName-wrapper.showing .projectName-sticky textarea {
+  font-size: 20px !important;
+}
+.HomePage .projectName-wrapper.showing .projectName-sticky .domain div {
+  font-size: 20px !important;
+}
+.HomePage .projectName-wrapper.showing .projectName-sticky .cta span {
+  font-size: 26px;
+}
+.HomePage .projectName-wrapper.showing .projectName-sticky .cta svg {
+  height: 22px;
+}
+.HomePage .projectName-wrapper h3 {
+  text-align: center;
+}
+.HomePage .projectName-wrapper h4 {
+  text-align: left;
+  font-size: 0.5rem;
+}
+.HomePage .projectName-wrapper .projectName-sticky .projectName {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  position: relative;
+}
+.HomePage .projectName-wrapper .projectName-sticky .projectName input {
+  font-size: 1rem;
+  font-weight: 400;
+  padding: 0 1.5rem;
+  padding-right: 0.25rem;
+  border: none;
+  border-bottom: 2px solid #090918;
+  height: 2rem;
+  width: 100%;
+  text-align: right;
+  transition: all 125ms linear;
+  outline: none;
+  color: #090918;
+}
+.HomePage .projectName-wrapper .projectName-sticky .projectName input::placeholder {
+  color: rgba(0, 0, 0, 0.45);
+}
+.HomePage .projectName-wrapper .projectName-sticky .projectName .domain {
+  width: fit-content;
+  background-color: #090918;
+  margin: auto;
+  margin-left: 0;
+  border: 2px solid #090918;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-left: none;
+  padding-right: 0.5rem;
+  height: calc(2rem - 2px);
+}
+.HomePage .projectName-wrapper .projectName-sticky .projectName .domain div {
+  height: fit-content;
+  margin: auto 0;
+  line-height: 1.85rem;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  padding-left: 6px;
+}
+.HomePage .projectName-wrapper .projectName-sticky .projectName svg {
+  position: absolute;
+  left: 24px;
+  top: 0;
+  background-color: white;
+  border-radius: 50%;
+}
+.HomePage .projectName-wrapper .projectName-sticky textarea {
+  resize: none;
+  border: 2px solid #090918;
+  font-size: 1rem;
+  font-weight: 400;
+  color: #090918;
+  outline: none;
+  width: calc(100% - 1rem - 1rem);
+  padding: 1.5rem 1rem;
+  height: 200px;
+  transition: all 125ms linear;
+}
+.HomePage .projectName-wrapper .projectName-sticky .bottom {
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 0.5rem;
+}
+.HomePage .projectName-wrapper .projectName-sticky .bottom a {
+  text-decoration: none;
+}
+.AboutPage {
+  padding: 92px 2rem;
+  background-color: #f6f9fc;
+}
+.AboutPage p {
+  font-size: 20px;
+  line-height: 32px;
+}
+.AboutPage .this-arrow {
+  animation: updown 3s infinite;
+  transform: rotate(25deg);
+  position: absolute;
+  top: 54px;
+}
+.AboutPage .smile {
+  animation: spin 3s infinite;
+}
+.AboutPage #nz-map {
+  height: 52px;
+  margin-bottom: -12px;
+}
+.AboutPage #font-colour {
+  background-color: black;
+  padding: 4px 8px;
+  color: white;
+  font-weight: 600;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes updown {
+  0% {
+    margin-top: 4px;
+  }
+  50% {
+    margin-top: 0px;
+  }
+  100% {
+    margin-top: 4px;
+  }
+}
+.NotPublished {
+  padding: 2rem;
+}
+.NotPublished li {
+  line-height: 1.5rem;
+}
+.Login.showing .overlay {
+  opacity: 1;
+}
+.Login.showing .content {
+  display: block;
+}
+.Login .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  background-color: black;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 125ms linear;
+  z-index: 9999;
+}
+.Login .content {
+  position: absolute;
+  margin: auto;
+  transform: translateY(-50%);
+  top: 50%;
+  background-color: white;
+  color: black;
+  left: 0;
+  right: 0;
+  width: fit-content;
+  padding: 1.5rem 2rem;
+  border-radius: 4px;
+  z-index: 99999;
+  display: none;
+}
+.Login .content p {
+  opacity: 0.85;
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+}
+.Login .content img {
+  width: 45px;
+  margin-right: 6px;
+}
+.Login .content .submit {
+  float: right;
+  background-color: #090918;
+  border-radius: 4px;
+  width: fit-content;
+  margin: auto;
+  margin-top: 24px;
+  font-size: 28px;
+  color: white;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: all 125ms linear;
+}
+.Login .content .submit:hover {
+  background-color: rgba(51, 51, 51, 0.5);
+}
+.ConnectDomain {
+  padding: 2rem;
+  max-height: calc(100vh - 4rem);
+  overflow-y: scroll;
+}
+.ConnectDomain .currently-connected-domain p a {
+  margin-left: 6px;
+}
+.ConnectDomain .connect-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem;
+  padding-left: 0;
+}
+.ConnectDomain .connect-wrapper input {
+  padding: 0.5rem 1rem;
+  font-size: 20px;
+  border-radius: 4px;
+  outline: red;
+  margin-left: 12px;
+  height: 16px;
+}
+.ConnectDomain .connect-wrapper .submit {
+  padding: 0.5rem 1rem;
+  background-color: #090918;
+  width: fit-content;
+  border-radius: 4px;
+  color: white;
+  text-align: center;
+  margin: auto;
+  transition: all 125ms linear;
+  cursor: pointer;
+}
+.ConnectDomain .connect-wrapper .submit:hover {
+  background-color: rgba(51, 51, 51, 0.5);
+}
+.ConnectDomain .instructions {
+  margin-top: 32px;
+}
+.UserSettings {
+  padding: 24px;
+  max-height: 100vh;
+  overflow: scroll;
+  box-sizing: border-box;
+  width: 100%;
+}
+.UserSettings label {
+  opacity: 0.67;
+}
+.UserSettings input {
+  display: block;
+  width: 350px;
+  outline: none;
+  padding: 6px 12px;
+  font-size: 16px;
+}
+.UserSettings span {
+  display: block;
+}
+.UserSettings .stripe-onboarding {
+  margin: 12px 0 32px 0;
+}
+.UserSettings .stripe-onboarding .email {
+  font-weight: 800;
+  display: block;
+  line-height: 1.75rem;
+}
+.UserSettings .stripe-connect-wrapper {
+  background-color: #090918;
+  border-radius: 4px;
+  width: fit-content;
+  padding: 6px 12px;
+  margin: 12px 0;
+  cursor: pointer;
+  margin-bottom: 32px;
+  width: 350px;
+  text-align: center;
+}
+.UserSettings .stripe-connect-wrapper:hover {
+  background-color: rgba(51, 51, 51, 0.5);
+}
+.UserSettings .stripe-connect-wrapper span {
+  color: white;
+  font-size: 16px;
+}
+.UserSettings .submit {
+  background-color: #090918;
+  border-radius: 4px;
+  width: fit-content;
+  padding: 6px 12px;
+  margin-top: 12px;
+  cursor: pointer;
+}
+.UserSettings .submit:hover {
+  background-color: rgba(51, 51, 51, 0.5);
+}
+.UserSettings .submit span {
+  color: white;
+  font-size: 16px;
+}
+.media-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  margin: auto;
+}
+.media-wrapper > label {
+  margin-bottom: 12px;
+  margin-right: 12px;
+  background-color: white;
+  color: black;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  text-align: center;
+  box-shadow: 0 0 0 1px #dadce0;
+  cursor: pointer;
+  transition: all 62.5ms linear;
+}
+.media-wrapper > label:hover {
+  background-color: #fc8039;
+  color: white;
+  border-color: #ff6f1c;
+}
+.media-wrapper > label svg {
+  cursor: pointer;
+}
+.img-wrapper {
+  position: relative;
+  width: fit-content;
+}
+.img-wrapper div {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background-color: black;
+  cursor: pointer;
+  transition: all 62.5ms linear;
+}
+.img-wrapper div:hover {
+  transform: scale(1.15);
+}
+.img-wrapper div svg {
+  margin-left: 1px;
+  margin-top: 1px;
+  color: white;
+}
+.img-wrapper .uploaded-img {
+  width: 250px;
+  min-width: 150px;
+  min-height: 100px;
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 0 0 1px #dadce0;
+  margin-bottom: 12px;
+}
+.ComingSoon {
+  width: fit-content;
+  margin: auto;
+  margin-top: 64px;
+}
+.ComingSoon * {
+  font-family: "Merriweather Sans";
+}
+.ComingSoon img {
+  max-width: 250px;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.Sandbox .ReturnToMainPage {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+  min-height: 50px;
+  max-height: 50px;
+  align-items: center;
+  transition: all 125ms ease;
+}
+.Sandbox .ReturnToMainPage:hover {
+  background-color: rgba(51, 51, 51, 0.5);
+}
+.Sandbox .ReturnToMainPage:hover a {
+  color: #ff6f1c;
+}
+.Sandbox .ReturnToMainPage a {
+  color: white;
+  transition: all 125ms ease;
+}
+.sandboxPreview-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+.sandboxPreview-wrapper .previewHeader {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: space-between;
+  width: calc(100vw - 12px - 12px);
+  background-color: white;
+  height: 45px;
+  padding-left: 12px;
+  padding-right: 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  background-color: #090918;
+}
+.sandboxPreview-wrapper .previewHeader > div {
+  font-size: 18px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 1px;
+}
+.sandboxPreview-wrapper .previewHeader a {
+  line-height: 32px;
+  text-decoration: none;
+}
+.sandboxPreview-wrapper .previewHeader a div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.sandboxPreview-wrapper .previewHeader a div svg {
+  color: rgba(255, 255, 255, 0.85);
+  width: 32px;
+  height: 28px;
+  margin-left: 6px;
+  transition: all 125ms ease;
+}
+.sandboxPreview-wrapper .previewHeader a div svg:hover {
+  color: #ff6f1c;
+}
+.sandboxPreview-wrapper iframe {
+  height: calc(100% - 45px);
+}
+.HomePage2 {
+  font-size: 62.5%;
+  min-height: 100vh;
+  height: 100vh;
+  position: fixed;
+  overflow: hidden;
+  left: 0;
+  top: 0;
+}
+.HomePage2 * {
+  font-family: 'Poppins', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+}
+.HomePage2 iframe {
+  height: 100vh;
+  border: none;
+}
+.HomePage2.type1 {
+  background-color: #0b7af3;
+}
+.HomePage2.type2 {
+  background-color: #2ab993;
+}
+.HomePage2.type3 {
+  background-color: #ff4828;
+}
+.HomePage2 .overlay {
+  background: linear-gradient(180deg, #fff 0, rgba(255, 255, 255, 0) 100%);
+  opacity: 0.4;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+}
+.HomePage2 .loading-cover {
+  position: fixed;
+  background-color: white;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999;
+  pointer-events: none;
+  transition: opacity 0.325s ease;
+}
+.HomePage2 .loading-cover.complete {
+  opacity: 0;
+}
+.HomePage2 .logo-wrapper {
+  left: 5%;
+  top: 5rem;
+  position: absolute;
+  width: 128px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 50px;
+  font-weight: 800;
+  letter-spacing: 0.25rem;
+}
+.HomePage2 .logo-wrapper img {
+  height: 64px;
+  object-fit: contain;
+  margin-right: 12px;
+}
+.HomePage2 .hero {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 100%;
+  padding-left: 5%;
+  padding-right: 5%;
+  opacity: 1;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+  text-align: center;
+  transition: opacity 0.5s ease;
+}
+.HomePage2 .hero h2 {
+  width: 60%;
+  text-align: left;
+  font-size: 2.25rem;
+  color: #fff;
+  line-height: 1.3;
+  font-weight: 500;
+  pointer-events: none;
+  margin: 0 !important;
+  margin-bottom: 35px;
+  font-weight: 500;
+}
+.HomePage2 .hero .projectName-wrapper {
+  display: flex;
+  width: 350px;
+  margin: 4rem 0 0;
+  align-items: center;
+  position: relative;
+  min-height: 4rem;
+}
+.HomePage2 .hero .projectName-wrapper:after {
+  content: "Type your brand name";
+  color: black;
+  position: absolute;
+  top: -2px;
+  text-transform: uppercase;
+  font-weight: 900;
+  font-size: 12px;
+  display: block;
+  text-align: left;
+}
+.HomePage2 .hero .projectName-wrapper #projectName-input {
+  margin-right: 20px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-size: 1.6rem;
+  width: 100%;
+  color: white;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.75);
+  font-weight: 600;
+  caret-color: white;
+}
+.HomePage2 .hero .projectName-wrapper #projectName-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+.HomePage2 .hero .submit-wrapper {
+  text-decoration: none;
+  color: white;
+  background: #252525;
+  letter-spacing: 0.1rem;
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  padding: 0.5rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  border-radius: 1.5rem;
+  transition: background 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  opacity: 1;
+  cursor: pointer;
+}
+.HomePage2 .hero .submit-wrapper span {
+  margin-right: 10px;
+}
+.HomePage2 .hero .submit-wrapper.hidden {
+  opacity: 0;
+  pointer-events: 0;
+}
+.HomePage2 .hero .Homepage2-cta {
+  text-transform: uppercase;
+  font-size: 1.4rem;
+  letter-spacing: 0.1rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  line-height: 7rem;
+  float: left;
+  padding: 0;
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+  background: #252525;
+  border-radius: 1.5rem;
+  transition: background 0.2s ease, color 0.2s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: none;
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  align-items: center;
+  box-shadow: 5px 5px 30px 0 rgba(0, 0, 0, 0.2);
+}
+.HomePage2 .hero .Homepage2-cta svg {
+  margin-top: -4px;
+  opacity: 0.5;
+  transition: all 0.2s ease;
+}
+.HomePage2 .hero .Homepage2-cta span {
+  color: #fff;
+  font-weight: 600;
+  margin-right: 1rem;
+  font-size: 1.1rem;
+}
+.HomePage2 .hero .Homepage2-cta:hover svg {
+  opacity: 1;
+}
+.HomePage2 .extras {
+  position: fixed;
+  bottom: 2.5rem;
+  left: 5%;
+  display: inline-flex;
+  flex-wrap: wrap;
+  max-width: 85%;
+}
+.HomePage2 .extras > * {
+  margin-top: 25px;
+}
+.HomePage2 .extras .attribution a {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.7);
+  opacity: 0.75;
+  font-weight: 600;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-right: 10px;
+  padding-right: 1.5rem;
+  opacity: 0.65;
+  transition: opacity 0.125s ease;
+}
+.HomePage2 .extras .attribution a:hover {
+  opacity: 1;
+}
+.HomePage2 .extras .support {
+  border-left: 1px solid rgba(255, 255, 255, 0.75);
+  text-transform: uppercase;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.7);
+  opacity: 0.65;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  font-weight: 600;
+  transition: all 0.125s ease;
+  display: flex;
+  align-items: center;
+  padding-right: 1.5rem;
+  padding-left: 1.5rem;
+}
+.HomePage2 .extras .support svg {
+  color: rgba(255, 255, 255, 0.7);
+  width: 2rem;
+  height: 2rem;
+  margin-right: 10px;
+  border: 0.2rem solid rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+}
+.HomePage2 .extras .support:hover {
+  opacity: 1;
+}
+.HomePage2 .extras .share {
+  border-left: 1px solid rgba(255, 255, 255, 0.75);
+  display: flex;
+  align-items: center;
+  padding-right: 1.5rem;
+  padding-left: 1.5rem;
+  opacity: 0.65;
+}
+.HomePage2 .extras .share:hover span {
+  opacity: 1;
+}
+.HomePage2 .extras .share button {
+  outline: none;
+}
+.HomePage2 .extras .share span {
+  text-transform: uppercase;
+  text-decoration: none;
+  color: white;
+  font-size: 0.75rem;
+  opacity: 0.7;
+  letter-spacing: 1px;
+  font-weight: 600;
+  transition: all 0.125s ease;
+  margin-right: 1rem;
+}
+.HomePage2 .extras .share img {
+  opacity: 0.7;
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-right: 10px;
+  cursor: pointer;
+}
+.HomePage2 .extras .share img:hover {
+  opacity: 1;
+}
+.HomePage2 .extras .share svg {
+  color: white;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  border: 0.15rem solid white;
+  padding: 0.17rem;
+  margin-right: 10px;
+  transition: all 0.125s ease;
+  opacity: 0.7;
+  cursor: pointer;
+}
+.HomePage2 .extras .share svg:hover {
+  opacity: 1;
+}
+.HomePage2 .extras .share svg:hover path {
+  opacity: 1;
+}
+.HomePage2 .website-wrapper {
+  width: 100vw;
+  margin: 0 auto;
+  position: relative;
+  transform: translateX(100vw) rotate(0deg) translateY(20vh);
+  pointer-events: none;
+  transition: 1.5s transform ease;
+  left: 0;
+  top: 0;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
+}
+.HomePage2 .website-wrapper .website-inner {
+  min-height: 160rem;
+  width: 100%;
+  background-color: #fff;
+  position: relative;
+  margin: 0 auto;
+  box-shadow: rgba(0, 0, 0, 0.3) 0.4rem 0.7rem 9.3rem 0.3rem;
+  overflow: hidden;
+}
+.HomePage2 .website-wrapper.loaded {
+  transform: translateX(calc(95% + .5rem)) rotate(-12.5deg) translateY(-2.5vh);
+}
+.HomePage2 .website-wrapper.showing {
+  transform: translateX(0) rotate(0deg) translateY(0vh);
+  pointer-events: all;
+}
+.UserButtons {
+  position: fixed;
+  left: -100vw;
+  transition: all 1s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  top: 1rem;
+}
+.UserButtons > div {
+  border-radius: 1.5rem;
+  background-color: #323232;
+  color: #ebebeb;
+  margin-top: 2rem;
+  padding: 1rem 1.5rem;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: background-color 125ms ease;
+}
+.UserButtons > div:hover {
+  background-color: #4b4b4b;
+}
+.UserButtons.showing {
+  left: 1vw;
+}
